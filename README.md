@@ -27,9 +27,9 @@ Se implementa el patrón **MVVM** y navegación entre páginas de manera sencill
 ## 🚀 Cómo probar la aplicación (Windows)
 1. **Clonar el repositorio**
    ```bash
-   git clone <URL_DE_TU_REPOSITORIO>
+   git clone https://github.com/Woldroj/VoiceNotes.git
 2. **Abrir en visual studio 2026**
-   Abrir solucion VoiceNotes.sln.
+   - Abrir solucion VoiceNotes.sln.
 
 3. **Activar reconocimimiento de voz en WINDOWS**
    - Configuración -> Privacidad y Seguridad -> Voz
