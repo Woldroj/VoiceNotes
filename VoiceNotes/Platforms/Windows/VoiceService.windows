@@ -1,0 +1,42 @@
+﻿#if WINDOWS
+using System;
+using System.Threading.Tasks;
+using Windows.Media.SpeechRecognition;
+
+namespace VoiceNotes.Services
+{
+    public class VoiceServiceWindows : IVoiceService
+    {
+        public async Task<string> DictateAsync()
+        {
+            try
+            {
+                // Crear el reconocedor de voz
+                var recognizer = new SpeechRecognizer();
+
+                // Establecer idioma del sistema
+                recognizer.Timeouts.EndSilenceTimeout = TimeSpan.FromSeconds(1);
+                recognizer.Timeouts.InitialSilenceTimeout = TimeSpan.FromSeconds(5);
+
+                // Configurar dictado
+                var dictationConstraint = new SpeechRecognitionTopicConstraint(
+                    SpeechRecognitionScenario.Dictation, "dictation");
+
+                recognizer.Constraints.Add(dictationConstraint);
+                await recognizer.CompileConstraintsAsync();
+
+                // Mostrar la UI de dictado y reconocer la voz
+                var result = await recognizer.RecognizeWithUIAsync();
+
+                return result.Status == SpeechRecognitionResultStatus.Success 
+                    ? result.Text 
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
+        }
+    }
+}
+#endif

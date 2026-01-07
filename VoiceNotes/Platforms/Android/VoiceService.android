@@ -1,0 +1,38 @@
+﻿#if ANDROID
+using Android.App;
+using Android.Content;
+using Android.Speech;
+using System.Threading.Tasks;
+using VoiceNotesMAUI.Services;
+
+[assembly: Microsoft.Maui.Controls.Dependency(typeof(VoiceNotesMAUI.Services.VoiceServiceAndroid))]
+
+namespace VoiceNotesMAUI.Services
+{
+    public class VoiceServiceAndroid : IVoiceService
+    {
+        TaskCompletionSource<string> _tcs;
+        public Task<string> DictateAsync()
+        {
+            _tcs = new TaskCompletionSource<string>();
+
+            var intent = new Intent(RecognizerIntent.ActionRecognizeSpeech);
+            intent.PutExtra(RecognizerIntent.ExtraLanguageModel, RecognizerIntent.LanguageModelFreeForm);
+            intent.PutExtra(RecognizerIntent.ExtraPrompt, "Habla ahora...");
+
+            var activity = Platform.CurrentActivity; 
+            activity.StartActivityForResult(intent, 1000);
+
+            // Aquí necesitarás capturar OnActivityResult en MainActivity y pasar el resultado a _tcs.SetResult(text)
+
+            return _tcs.Task;
+        }
+
+        // Método para MainActivity:
+        public void SetResult(string text)
+        {
+            _tcs?.SetResult(text);
+        }
+    }
+}
+#endif
