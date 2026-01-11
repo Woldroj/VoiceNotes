@@ -1,16 +1,28 @@
 using VoiceNotes.ViewModels;
+using VoiceNotes.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace VoiceNotes.Views;
 
 public partial class NotePage : ContentPage
 {
-	public NotePage()
-	{
-		InitializeComponent();
+    public NotePage()
+    {
+        InitializeComponent();
+        Loaded += NotePage_Loaded;
+    }
 
-		var vm = new NotesViewModel();
-		vm.Navigation = Navigation;
+    private void NotePage_Loaded(object sender, EventArgs e)
+    {
+        var services = Handler.MauiContext.Services;
+        var storageService = services.GetService<NotesStorageService>();
+        var voiceService = services.GetService<IVoiceService>();
 
-		BindingContext = vm;
+        var vm = new NotesViewModel(storageService, voiceService)
+        {
+            Navigation = Navigation
+        };
+
+        BindingContext = vm;
     }
 }

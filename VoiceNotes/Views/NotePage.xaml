@@ -2,32 +2,82 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VoiceNotes.Views.NotePage"
-             Title="Mis Notas">
-    <VerticalStackLayout>
-        <Label 
-            Text="VoiceNotes"
-            FontSize="28"
-            HorizontalOptions="Center"/>
-        <Button
-            Text="➕ Nueva nota por voz"
-            Command="{Binding NewNoteCommand}"/>
-        <CollectionView ItemsSource="{Binding Notes}">
+             Title="VoiceNotes">
+
+    <VerticalStackLayout Spacing="10" Padding="15">
+
+        <Label Text="🎤 VoiceNotes"
+               FontSize="30"
+               HorizontalOptions="Center"
+               FontAttributes="Bold"/>
+
+        <Button Text="➕ Nueva nota por voz"
+                Command="{Binding NewNoteCommand}"
+                BackgroundColor="#4F46E5"
+                TextColor="White"
+                CornerRadius="12"/>
+        <Entry Placeholder="🔍 Buscar nota..."
+               Text="{Binding SearchText}"
+               Margin="0,5"/>
+        <Button Text="🎤 Buscar por voz"
+                Command="{Binding VoiceSearchCommand}"
+                BackgroundColor="#16A34A"
+                TextColor="White"
+                CornerRadius="12"/>
+
+        <CollectionView ItemsSource="{Binding FilteredNotes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="10" Margin="5" BorderColor="LightGray" CornerRadius="8">
-                        <StackLayout>
-                            <Label Text="{Binding Text}" FontSize="16"/>
-                            <Label Text="{Binding Created, StringFormat='Creada el {0:dd/MM/yyyy HH:mm}'}" FontSize="12" TextColor="Gray"/>
-                        </StackLayout>
+                    <Frame Padding="12"
+                           Margin="5"
+                           CornerRadius="15"
+                           HasShadow="True"
+                           BackgroundColor="Black">
+
+                        <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
+
+                            <Label Grid.Column="0"
+                                   Grid.Row="0"
+                                   Text="{Binding Text}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap"/>
+
+                            <Label Grid.Column="0"
+                                   Grid.Row="1"
+                                   Text="{Binding Created, StringFormat='Creada: {0:dd/MM/yyyy HH:mm}'}"
+                                   FontSize="12"
+                                   TextColor="Gray"/>
+
+                            <!-- Botón editar -->
+                            <Button Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    Text="✏️"
+                                    FontSize="18"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditNoteCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                            <!-- Botón borrar -->
+                            <Button Grid.Column="2"
+                                    Grid.RowSpan="2"
+                                    Text="🗑️"
+                                    FontSize="18"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteNoteCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                        </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
+
             <CollectionView.EmptyView>
-                <Label 
-                    Text="No hay notas todavía"
-                    HorizontalOptions="Center"/>
+                <Label Text="No hay notas todavía"
+                       HorizontalOptions="Center"
+                       FontSize="16"
+                       TextColor="Gray"/>
             </CollectionView.EmptyView>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>
