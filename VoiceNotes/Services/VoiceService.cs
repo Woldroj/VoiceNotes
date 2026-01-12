@@ -18,10 +18,7 @@ namespace VoiceNotes.Services
                         return string.Empty;
                 }
 
-                // 🔹 Simulación de dictado
-                // Para clase funciona en todas las plataformas
-                // En Android real se reemplaza por la implementación nativa
-                await Task.Delay(500); // Simula tiempo de dictado
+                await Task.Delay(500);
                 return "Texto de prueba dictado";
             }
             catch (FeatureNotSupportedException)
